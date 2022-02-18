@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
        - name: hello-world
-         image: 10.96.0.82:443/acc/samples/helloworld:latest
+         image: <cluster-ip>:443/acc/samples/helloworld:latest
       imagePullSecrets:
        - name: regcred
