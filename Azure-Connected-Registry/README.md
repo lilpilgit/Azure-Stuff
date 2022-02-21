@@ -47,7 +47,7 @@ sudo ls /etc/containerd/certs.d/<cluster-ip>:443
 ```console
 sudo nano /etc/containerd/config.toml
 ```
-
+``` yaml
 version = 2
 [plugins]
   [plugins."io.containerd.grpc.v1.cri"]
@@ -56,7 +56,7 @@ version = 2
     config_path = "/etc/containerd/certs.d"     
   [plugins."io.containerd.grpc.v1.cri".registry.configs."<cluster-ip>:443".tls]
     ca_file   = "/etc/containerd/certs.d/<cluster-ip>:443/ca.crt"
-
+```
 8) Restart daemon
 ```console
 sudo systemctl restart containerd
