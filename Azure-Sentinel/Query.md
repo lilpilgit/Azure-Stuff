@@ -12,5 +12,5 @@ SecurityEvent
 | where TimeGenerated >= ago(1d)
 | where * contains "<user name>"
 | where EventID in (4625, 4624)
-| summarize by Computer, Activity, IpAddress, LogonTypeName, Status, SubStatus, 
+| summarize by Computer, Activity, IpAddress, LogonTypeName, Status, SubStatus
 ```
