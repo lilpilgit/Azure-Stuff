@@ -6,7 +6,7 @@ search "<user name>"
 
 // Search for different type of logins:
 // 4624 successfull login
-// 4624 failed login
+// 4625 failed login
 
 SecurityEvent
 | where TimeGenerated >= ago(1d)
