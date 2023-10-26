@@ -32,6 +32,7 @@ Search for type of substatus:
 |0xc000015b	| The user has not been granted the requested logon type (aka logon right) at this machine
 
 Search for IP address:
+
 ```kql
 SecurityEvent
 | where TimeGenerated >= ago(1d)
