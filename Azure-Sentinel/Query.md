@@ -31,3 +31,13 @@ Search for type of substatus:
 |0xC0000225	| evidently a bug in Windows and not a risk
 |0xc000015b	| The user has not been granted the requested logon type (aka logon right) at this machine
 
+Search for IP address:
+```kql
+SecurityEvent
+| where TimeGenerated >= ago(1d)
+| where * contains "<user name>"
+| where EventID in (4625, 4624)
+| where IpAddress in ("<ip1>","<ip2>")
+| project TimeGenerated, Computer, Activity, IpAddress, LogonTypeName, Status, SubStatus
+```
+
