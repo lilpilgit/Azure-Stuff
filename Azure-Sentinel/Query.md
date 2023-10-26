@@ -15,7 +15,7 @@ SecurityEvent
 | summarize by TimeGenerated, Computer, Activity, IpAddress, LogonTypeName, Status, SubStatus
 ```
 
-Search for type of substatus:
+Search for type of substatus (of 4625 EventID):
 |Status and Sub Status Codes |	Description (not checked against "Failure Reason:") |
 | ------------- | ------------- |
 |0xC0000064 |	user name does not exist
