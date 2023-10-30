@@ -42,3 +42,7 @@ SecurityEvent
 | project TimeGenerated, Computer, Activity, IpAddress, LogonTypeName, Status, SubStatus
 ```
 
+***
+***
+
+
