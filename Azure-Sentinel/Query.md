@@ -31,7 +31,7 @@ Search for type of substatus (of 4625 EventID):
 |0xC0000225	| evidently a bug in Windows and not a risk
 |0xc000015b	| The user has not been granted the requested logon type (aka logon right) at this machine
 
-Search for IP address:
+### Search for IP address
 
 ```kql
 SecurityEvent
@@ -45,13 +45,15 @@ SecurityEvent
 ***
 ***
 
-Ricerca nelle tabelle che non conosco
+### Searching the tables I don't know
 ```kql
 search "elemento_da_cercare"
 |  summarize count () by $table
 ```
+***
+***
 
-Controllo login riusciti utente
+### Successful user login check
 ```kql
 SigninLogs
 |  where TimeGenerated >= ago(7d)
@@ -60,8 +62,10 @@ SigninLogs
 |  project TimeGenerated, IPAddress, ClientAppUsed, AppDisplayName, AuthenticationRequirement, tostring(DeviceDetail.deviceId), tostring(DeviceDetail.displayName)
 |  sort by TimeGenerated
 ```
+***
+***
 
-Controllo login NON interattivi riusciti da un utente
+### Checking NON-interactive logins succeeded by a user
 ```kql
 AADNonInteractiveUserSignInLogs
 |  where * contains "utenza"
@@ -69,17 +73,21 @@ AADNonInteractiveUserSignInLogs
 |  summarize by TimeGenerated,AuthenticationRequirement,ResultDescription,IPAddress,tostring(DeviceDetail)
 |  sort by TimeGenerated
 ```
- 
-Query controllo cambio password utenza
+***
+***
+
+### Checking attempts to change a user's password
 ```kql
 AuditLogs
 |  where TimeGenerated >= ago(7d)
 |  where * contains "Nome_utente_da_cercare"
 |  summarize by TimeGenerated, OperationName
 ```
+***
+***
 
-Query Standard PIM
-(Da modificare il campo con la dicitura "NOME_UTENTE_DA_CERCARE") 
+### Azure PIM Alert
+_(To be changed to the field labeled "User_name_to_seek") _
 ```kql
 union isfuzzy = true (
 //Azure Resources Roles
@@ -89,7 +97,7 @@ AuditLogs
 |  where Category == "ResourceManagement"
 |  extend Role = tostring(TargetResources[0].displayName)
 |  extend User = tostring(TargetResources[2].displayName)
-|  where User contains "Nome_utente_da_cercare"
+|  where User contains "User_name_to_seek"
 |  project TimeGenerated, User, Role, OperationName, Result, Commento = ResultDescription, IPAddress = tostring(AdditinalDetails[7].value), ExpirationTime = tostring(AdditionalDetails[3].value), InitiatedBy= tostring(InitiatedBy.user.displayName)
 |  sort by TimeGenerated), 
 (
@@ -105,8 +113,10 @@ AuditLogs
 |  sort by TimeGenerated
 )
 ```
+***
+***
 	 
-Office activities of a user
+### Office activities of a user
 ```kql
 OfficeActivity
 |  where TimeGenerated >= ago(1d)
@@ -114,35 +124,40 @@ OfficeActivity
 |  project TimeGenerated, Operation, UserId, ClientIP, OfficeObjectId, tostring(todynamic(Parameters)[1])
 |  sort by TimeGenerated
 ```
-
-Controlli su utenza, Job role, etc..
+***
+***
+### User controls, Job role, etc.
 ```kql
 IdentityInfo
 |  where * contains "Nome_utente_da_cercare"
 ```
 
-Colonne per scoprire l'utenza
-(Colonne utili a scoprire l'utenza, quando non si hanno dettagli)
-	TargetAccount: sembra sia l'account effettivo che richiede il login.
-	SubjectAccount: sembra sia il campo che registra il login di un'utenza
-	(Siginlogs sono esterni; SecurityEvent interni)
-	
+⚠️Columns for discovering users
+_Useful columns for discovering the user, when you don't have details_
+- TargetAccount: seems to be the actual account that requires login.
+- SubjectAccount: appears to be the field that records a user's login.
+- Signinlogs are external; SecurityEvents are internal
 
-Ottenere dettagli in più sulla base delle sole entità presenti nel Sentinel
+***
+***
+
+### Getting extra details based only on the entities in the Sentinel
 ```kql
 SecurityEvent
 |  where TimeGenerated >= ago(5d)
 |  where EventID == NUMERO
 |  where * contains "qualcosa"
 ```
-
-Ottenere maggiori informazioni su un utenza
+***
+***
+### Getting more information about a user
 ```kql
 _GetWatchlist('Admin_users')
 |  where * contains "admin-da-ricercare"
 ```
-
-Access tentative to company VPN with an INVALID username.
+***
+***
+### Access tentative to company VPN with an INVALID username.
 ```kql
 CommonSecurityLog 
 |  where Activity contains "GLOBALPROTECT" 
